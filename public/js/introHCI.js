@@ -32,6 +32,9 @@ function addProjectDetails(e) {
 
 function projectClick (result) {
     console.log (result)
+    var query = '.project#'+'project'+result.id+' .details';
+    var htmlString = '<h4>'+result.title+'</h4> <h5>'+result.date+'</h5> <img src="'+result.image+'" class="detailsImage">'+result.summary
+    $(query).html(htmlString)
 }
 
 /*
@@ -40,4 +43,5 @@ function projectClick (result) {
  */
 function randomizeColors(e) {
 	console.log("User clicked on color button");
+    $.get ('/palette')
 }
