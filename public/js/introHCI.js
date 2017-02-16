@@ -2,46 +2,56 @@
 
 // Call this function when the page loads (the "ready" event)
 $(document).ready(function() {
-	initializePage();
+    initializePage();
 })
 
 /*
- * Function that is called when the document is ready.
- */
+* Function that is called when the document is ready.
+*/
 function initializePage() {
-	$('.project a').click(addProjectDetails);
+    $('.project a').click(addProjectDetails);
 
-	$('#colorBtn').click(randomizeColors);
+    $('#colorBtn').click(randomizeColors);
 }
 
 /*
- * Make an AJAX call to retrieve project details and add it in
- */
+* Make an AJAX call to retrieve project details and add it in
+*/
 function addProjectDetails(e) {
-	// Prevent following the link
-	e.preventDefault();
+    // Prevent following the link
+    e.preventDefault();
 
-	// Get the div ID, e.g., "project3"
-	var projectID = $(this).closest('.project').attr('id');
-	// get rid of 'project' from the front of the id 'project3'
-	var idNumber = projectID.substr('project'.length);
+    // Get the div ID, e.g., "project3"
+    var projectID = $(this).closest('.project').attr('id');
+    // get rid of 'project' from the front of the id 'project3'
+    var idNumber = projectID.substr('project'.length);
 
     $.get('/project/'+idNumber, projectClick);
-	console.log("User clicked on project " + idNumber);
+    console.log("User clicked on project " + idNumber);
 }
 
 function projectClick (result) {
     console.log (result)
     var query = '.project#'+'project'+result.id+' .details';
     var htmlString = '<h4>'+result.title+'</h4> <h5>'+result.date+'</h5> <img src="'+result.image+'" class="detailsImage">'+result.summary
-    $(query).html(htmlString)
-}
+        $(query).html(htmlString)
+    }
 
-/*
- * Make an AJAX call to retrieve a color palette for the site
- * and apply it
- */
-function randomizeColors(e) {
-	console.log("User clicked on color button");
-    $.get ('/palette')
-}
+    function gotPalette (result) {
+        var colors = result.colors.hex;
+        console.log (colors)
+        $('body').css('background-color', colors[0]);
+        $('.thumbnail').css('background-color', colors[1]);
+        $('h1, h2, h3, h4, h5, h5').css('color', colors[2]);
+        $('p').css('color', colors[3]);
+        $('.project img').css('opacity', .75);
+    }
+
+    /*
+    * Make an AJAX call to retrieve a color palette for the site
+    * and apply it
+    */
+    function randomizeColors(e) {
+        console.log("User clicked on color button");
+        $.get ('/palette/', gotPalette);
+    }
