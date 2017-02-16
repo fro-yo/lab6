@@ -26,7 +26,12 @@ function addProjectDetails(e) {
 	// get rid of 'project' from the front of the id 'project3'
 	var idNumber = projectID.substr('project'.length);
 
+    $.get('/project/'+idNumber, projectClick);
 	console.log("User clicked on project " + idNumber);
+}
+
+function projectClick (result) {
+    console.log (result)
 }
 
 /*
